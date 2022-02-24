@@ -5,5 +5,37 @@ metadata:
 info:
   description: service-a for testing
 pipeline:
+  mutators:
+    - image: gcr.io/kpt-fn/apply-setters:v0.2
+      configMap:
+        replicas: "3" 
+        imagetag: 1.21.6
+        web1: |
+	  server {
+	    listen          80;
+	    server_name     big1.server.com test1.server.com;
+	    access_log      logs/big.server.access.log main;
+
+	    location / {
+	      proxy_pass      http://big_server_com1;
+	    }
+	  }          
+        web2: |
+          server {
+            listen          80;
+            server_name     big2.server.com test2.server.com;
+            access_log      logs/big.server.access.log main;
+
+            location / {
+              proxy_pass      http://big_server_com2;
+            }
+          }
+    - image: gcr.io/kpt-fn/ensure-name-substring:v0.1.1
+      configMap:
+        prepend: prod-
+        append: -prod
+    - image: gcr.io/kpt-fn/set-labels:v0.1
+      configMap:
+        env: dev
   validators:
     - image: gcr.io/kpt-fn/kubeval:v0.1

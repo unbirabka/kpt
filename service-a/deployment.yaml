@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: service-a
-        image: nginx:1.14.2 # kpt-set: nginx:${tag}
+        image: nginx:1.14.2 # kpt-set: nginx:${imagetag}
         ports:
         - containerPort: 80
